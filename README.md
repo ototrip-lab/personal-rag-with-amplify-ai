@@ -9,7 +9,7 @@ First, run the development server:
 ```bash
 npm install
 mkdir .amplify
-mv .dummy/generated ./amplify
+mv .dummy/generated .amplify
 npx ampx sandbox
 npm run dev
 ```

@@ -77,6 +77,7 @@ export const handler: Schema['createKnowledge']['functionHandler'] = async (
     markdowns.map(async (markdown, index) => {
       return client.models.UserKnowledgeContent.create({
         knowledgeID,
+        username,
         page: index.toString(),
         markdown,
       });

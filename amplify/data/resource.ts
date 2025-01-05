@@ -15,16 +15,17 @@ const schema = a
         contents: a.hasMany('UserKnowledgeContent', 'knowledgeID'),
       })
       .secondaryIndexes((index) => [index('username')])
-      .authorization((allow) => allow.owner()),
+      .authorization((allow) => allow.ownerDefinedIn('username')),
 
     UserKnowledgeContent: a
       .model({
         knowledge: a.belongsTo('UserKnowledge', 'knowledgeID'),
         knowledgeID: a.id().required(),
+        username: a.id().required(),
         page: a.string().required(),
         markdown: a.string(),
       })
-      .authorization((allow) => allow.owner()),
+      .authorization((allow) => allow.ownerDefinedIn('username')),
 
     // Define Lambda Functions
     createKnowledge: a

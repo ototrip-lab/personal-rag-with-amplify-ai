@@ -8,7 +8,13 @@ import {
   AlertVariations,
   Button,
   Flex,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Tabs,
+  Text,
   View,
   withAuthenticator,
   WithAuthenticatorProps,
@@ -22,6 +28,7 @@ import {
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from 'aws-amplify/data';
 import { useCallback, useState } from 'react';
+import Markdown from 'react-markdown';
 
 const client = generateClient<Schema>();
 
@@ -44,7 +51,10 @@ const ChatTab = () => {
   );
 };
 
-const StorageUploadTab = ({ user }: { user?: AuthUser }) => {
+const StorageTab = () => {
+  const { StorageBrowser } = createStorageBrowser({
+    config: createAmplifyAuthAdapter(),
+  });
   const [creatingState, setCreatingState] = useState<AlertVariations>();
 
   const handleMakeKnowledge = useCallback(async ({ key }: { key?: string }) => {
@@ -90,15 +100,88 @@ const StorageUploadTab = ({ user }: { user?: AuthUser }) => {
         onUploadSuccess={handleMakeKnowledge}
         maxFileCount={1}
       />
+
+      <StorageBrowser />
+    </Flex>
+  );
+};
+
+const KnowledgeTab = ({ user }: { user?: AuthUser }) => {
+  const [selectedItems, setSelectedItems] = useState<
+    Schema['UserKnowledgeContent']['type'][]
+  >([]);
+  const [knowledge, setKnowledge] =
+    useState<Schema['UserKnowledge']['type'][]>();
+
+  const isSelected = selectedItems.length > 0;
+  const handleFetchKnowledge = useCallback(async () => {
+    if (!user?.username) return;
+
+    const result =
+      await client.models.UserKnowledge.listUserKnowledgeByUsername({
+        username: user.username,
+      });
+    if (!result.data) return;
+
+    setKnowledge(result.data);
+  }, [user]);
+
+  return (
+    <Flex direction='column' rowGap='l'>
+      <Button
+        size='small'
+        variation='primary'
+        onClick={() =>
+          isSelected ? setSelectedItems([]) : handleFetchKnowledge()
+        }
+      >
+        {isSelected ? 'Back' : 'Fetch Knowledge'}
+      </Button>
+
+      {isSelected ? (
+        <Flex direction='column' rowGap='l'>
+          {selectedItems.map((content) => (
+            <Flex direction='column' rowGap='l'>
+              <Markdown>{content.markdown}</Markdown>
+            </Flex>
+          ))}
+        </Flex>
+      ) : (
+        <Table highlightOnHover={true} variation='striped'>
+          <TableHead>
+            <TableRow>
+              <TableCell as='th'>Title</TableCell>
+              <TableCell as='th'>Abstract</TableCell>
+              <TableCell as='th'>CreatedAt</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {knowledge?.map((item) => (
+              <TableRow
+                key={item.id}
+                onClick={async () => {
+                  const findItem = knowledge.find((k) => k.id === item.id);
+                  const selected = await findItem?.contents();
+                  if (selected?.data) {
+                    setSelectedItems(selected.data);
+                  }
+                }}
+              >
+                <TableCell>{item.key}</TableCell>
+                <TableCell>
+                  <Text fontSize='12px'>{item.abstract}</Text>
+                </TableCell>
+                <TableCell>{item.createdAt}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </Flex>
   );
 };
 
 const App = ({ signOut, user }: WithAuthenticatorProps) => {
-  const { StorageBrowser } = createStorageBrowser({
-    config: createAmplifyAuthAdapter(),
-  });
-
   return (
     <Flex justifyContent='center' alignItems='center'>
       <Flex
@@ -113,12 +196,7 @@ const App = ({ signOut, user }: WithAuthenticatorProps) => {
             <h1>Personal RAG Chat</h1>
           </View>
           <Flex justifyContent='center' alignItems='center'>
-            <Button
-              size='small'
-              variation='primary'
-              colorTheme='info'
-              onClick={signOut}
-            >
+            <Button size='small' variation='menu' onClick={signOut}>
               Sign out
             </Button>
           </Flex>
@@ -127,18 +205,18 @@ const App = ({ signOut, user }: WithAuthenticatorProps) => {
         <Flex direction='row' rowGap='xxl'>
           <Tabs.Container defaultValue='1' flex={1}>
             <Tabs.List spacing='equal'>
-              <Tabs.Item value='1'>チャット</Tabs.Item>
-              <Tabs.Item value='2'>アップロード</Tabs.Item>
-              <Tabs.Item value='3'>ストレージ</Tabs.Item>
+              <Tabs.Item value='1'>Chat</Tabs.Item>
+              <Tabs.Item value='2'>Storage</Tabs.Item>
+              <Tabs.Item value='3'>Knowledge</Tabs.Item>
             </Tabs.List>
             <Tabs.Panel value='1'>
               <ChatTab />
             </Tabs.Panel>
             <Tabs.Panel value='2'>
-              <StorageUploadTab user={user} />
+              <StorageTab />
             </Tabs.Panel>
             <Tabs.Panel value='3'>
-              <StorageBrowser />
+              <KnowledgeTab user={user} />
             </Tabs.Panel>
           </Tabs.Container>
         </Flex>
