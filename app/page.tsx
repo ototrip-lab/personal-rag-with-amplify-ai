@@ -110,7 +110,7 @@ const App = ({ signOut, user }: WithAuthenticatorProps) => {
       >
         <Flex direction='row' rowGap='l'>
           <View flex={1} textAlign='center'>
-            <h1>Personal RAG Chat System</h1>
+            <h1>Personal RAG Chat</h1>
           </View>
           <Flex justifyContent='center' alignItems='center'>
             <Button
