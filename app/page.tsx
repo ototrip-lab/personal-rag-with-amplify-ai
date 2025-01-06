@@ -163,7 +163,11 @@ const KnowledgeTab = ({ user }: { user?: AuthUser }) => {
                   const findItem = knowledge.find((k) => k.id === item.id);
                   const selected = await findItem?.contents();
                   if (selected?.data) {
-                    setSelectedItems(selected.data);
+                    // page番号で並び替え
+                    const items = selected.data.sort((a, b) => {
+                      return Number(a.page) - Number(b.page);
+                    });
+                    setSelectedItems(items);
                   }
                 }}
               >

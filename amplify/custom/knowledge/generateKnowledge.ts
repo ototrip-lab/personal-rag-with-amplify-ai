@@ -84,7 +84,7 @@ export const handler: Handler = async (event: Payload, context: Context) => {
   const markdowns = answers.map((answer) => answer.content as string);
 
   const abstract = await chain.invoke({
-    question: '10_000字で要約してください。',
+    question: '10_000字以内で要約してください。',
     document: markdowns.join('\n'),
   });
 
