@@ -1,4 +1,4 @@
-import { env } from '$amplify/env/getRetrieve'; // replace with your function name
+import { env } from '$amplify/env/getRetrieve';
 import { getAmplifyDataClientConfig } from '@aws-amplify/backend/function/runtime';
 import { BedrockEmbeddings } from '@langchain/aws';
 import { BedrockChat } from '@langchain/community/chat_models/bedrock';

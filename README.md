@@ -8,8 +8,7 @@ First, run the development server:
 
 ```bash
 npm install
-mkdir .amplify
-mv .dummy/generated .amplify
+sh scripts/prebuild.sh
 npx ampx sandbox
 npm run dev
 ```

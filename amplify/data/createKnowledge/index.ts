@@ -1,4 +1,4 @@
-import { env } from '$amplify/env/getRetrieve'; // replace with your function name
+import { env } from '$amplify/env/getRetrieve';
 import { getAmplifyDataClientConfig } from '@aws-amplify/backend/function/runtime';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import { Amplify } from 'aws-amplify';
