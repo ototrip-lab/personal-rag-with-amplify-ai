@@ -30,6 +30,7 @@
     "@langchain/aws": "0.1.3",
     "@langchain/community": "0.3.24",
     "@langchain/core": "0.3.29",
+    "@parcel/watcher": "2.5.0",
     "@types/node": "22.10.5",
     "@types/react": "18.3.14",
     "@types/react-dom": "18.3.2",
