@@ -141,7 +141,7 @@ const KnowledgeTab = ({ user }: { user?: AuthUser }) => {
       {isSelected ? (
         <Flex direction='column' rowGap='l'>
           {selectedItems.map((content) => (
-            <Flex direction='column' rowGap='l'>
+            <Flex key={content.id} direction='column' rowGap='l'>
               <Markdown>{content.markdown}</Markdown>
             </Flex>
           ))}
