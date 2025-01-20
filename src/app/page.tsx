@@ -25,7 +25,7 @@ import {
 } from "@aws-amplify/ui-react-storage/browser";
 import "@aws-amplify/ui-react/styles.css";
 import { generateClient } from "aws-amplify/data";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -33,7 +33,8 @@ import { useAIConversation } from "@/src/app/client";
 
 const client = generateClient<Schema>();
 
-const ChatTab = () => {
+const ChatTab = ({ user }: { user?: AuthUser }) => {
+	const [issues, setIssues] = useState<Schema["chat"]["type"][]>();
 	const [
 		{
 			data: { messages },
@@ -43,12 +44,26 @@ const ChatTab = () => {
 		handleSendMessage,
 	] = useAIConversation("chat");
 
+	const handleFetchIssues = useCallback(async () => {
+		if (!user?.username) return;
+
+		const result = await client.conversations.chat.list();
+		if (!result.data) return;
+		setIssues(result.data);
+	}, [user]);
+
+	useEffect(() => {
+		handleFetchIssues();
+	}, [handleFetchIssues]);
+
 	return (
-		<AIConversation
-			messages={messages}
-			isLoading={isLoading && !hasError}
-			handleSendMessage={handleSendMessage}
-		/>
+		<Flex direction="row" rowGap="l">
+			<AIConversation
+				messages={messages}
+				isLoading={isLoading && !hasError}
+				handleSendMessage={handleSendMessage}
+			/>
+		</Flex>
 	);
 };
 
@@ -79,25 +94,20 @@ const StorageTab = () => {
 		setCreatingState("success");
 	}, []);
 
-	const getAlertMessage = () => {
-		switch (creatingState) {
-			case "info":
-				return "情報を整理中です...";
-			case "error":
-				return "エラーが発生しました";
-			case "success":
-				return "情報の整理が完了しました";
-			default:
-				return "";
-		}
+	const AlertMessage: { [key in AlertVariations]?: string } = {
+		info: "情報を整理中です...",
+		error: "エラーが発生しました",
+		success: "情報の整理が完了しました",
 	};
 
 	return (
 		<Flex direction="column" rowGap="l">
-			<Alert variation={creatingState}>{getAlertMessage()}</Alert>
+			<Alert variation={creatingState}>
+				{creatingState && AlertMessage[creatingState]}
+			</Alert>
 			<StorageManager
 				acceptedFileTypes={["image/*", "application/pdf"]}
-				accessLevel="protected"
+				accessLevel="private"
 				onUploadSuccess={handleMakeKnowledge}
 				maxFileCount={1}
 			/>
@@ -113,8 +123,8 @@ const KnowledgeTab = ({ user }: { user?: AuthUser }) => {
 	>([]);
 	const [knowledge, setKnowledge] =
 		useState<Schema["UserKnowledge"]["type"][]>();
-
 	const isSelected = selectedItems.length > 0;
+
 	const handleFetchKnowledge = useCallback(async () => {
 		if (!user?.username) return;
 
@@ -215,7 +225,7 @@ const App = ({ signOut, user }: WithAuthenticatorProps) => {
 							<Tabs.Item value="3">Knowledge</Tabs.Item>
 						</Tabs.List>
 						<Tabs.Panel value="1">
-							<ChatTab />
+							<ChatTab user={user} />
 						</Tabs.Panel>
 						<Tabs.Panel value="2">
 							<StorageTab />
