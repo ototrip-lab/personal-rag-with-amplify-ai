@@ -8,5 +8,5 @@ import config from "@/amplify_outputs.json";
 Amplify.configure(config, { ssr: true });
 
 export function ConfigureAmplifyClientSide() {
-	return null;
+  return null;
 }
