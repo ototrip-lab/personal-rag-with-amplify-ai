@@ -7,34 +7,34 @@ import { useAIConversation } from "@/src/app/client";
 import { Button, Flex, View } from "@aws-amplify/ui-react";
 
 export const ChatTab = ({ user }: { user?: AuthUser }) => {
-	const [
-		{
-			data: { messages },
-			isLoading,
-			hasError,
-		},
-		handleSendMessage,
-	] = useAIConversation("chat");
+  const [
+    {
+      data: { messages },
+      isLoading,
+      hasError,
+    },
+    handleSendMessage,
+  ] = useAIConversation("chat");
 
-	return (
-		<Flex direction="column" rowGap="l">
-			<View flex={1} textAlign="end">
-				<Button
-					size="small"
-					variation="menu"
-					onClick={() => window.location.reload()}
-				>
-					reload chat
-				</Button>
-			</View>
-			<AIConversation
-				messages={messages}
-				isLoading={isLoading && !hasError}
-				handleSendMessage={handleSendMessage}
-				messageRenderer={{
-					text: ({ text }) => <Markdown>{text}</Markdown>,
-				}}
-			/>
-		</Flex>
-	);
+  return (
+    <Flex direction="column" rowGap="l">
+      <View flex={1} textAlign="end">
+        <Button
+          size="small"
+          variation="menu"
+          onClick={() => window.location.reload()}
+        >
+          reload chat
+        </Button>
+      </View>
+      <AIConversation
+        messages={messages}
+        isLoading={isLoading && !hasError}
+        handleSendMessage={handleSendMessage}
+        messageRenderer={{
+          text: ({ text }) => <Markdown>{text}</Markdown>,
+        }}
+      />
+    </Flex>
+  );
 };
