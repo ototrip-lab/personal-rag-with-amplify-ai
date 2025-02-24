@@ -17,8 +17,8 @@
     "aws-amplify": "6.13.1",
     "aws-sdk": "2.1692.0",
     "next": "15.1.7",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "react-markdown": "10.0.0"
   },
   "devDependencies": {
@@ -32,8 +32,8 @@
     "@langchain/core": "0.3.40",
     "@parcel/watcher": "2.5.1",
     "@types/node": "22.13.5",
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
     "aws-cdk": "2.1000.2",
     "aws-cdk-lib": "2.180.0",
     "constructs": "10.4.2",
