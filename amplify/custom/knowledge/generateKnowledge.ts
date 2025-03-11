@@ -11,7 +11,7 @@ const BUCKET_NAME = process.env.BUCKET_NAME;
 // AWS SDK
 const s3Client = new S3();
 const llm = new BedrockChat({
-  model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+  model: 'anthropic.claude-3-5-sonnet-20240620-v1:0',
 });
 
 // props
@@ -73,14 +73,17 @@ export const handler: Handler = async (event: Payload, context: Context) => {
   const chain = RunnableSequence.from([prompt, llm]);
 
   // invoke
-  const answersQueue = docs.map(async (doc) => {
+  const chunkSize = 1;
+  const answers = [];
+  for (let i = 0; i < docs.length; i += chunkSize) {
+    const chunk = docs.slice(i, i + chunkSize);
     const answer = await chain.invoke({
       question: '内容をMarkdown形式で返してください。',
-      document: doc.pageContent,
+      document: chunk.map((doc) => doc.pageContent).join('\n\n\n'),
     });
-    return answer;
-  });
-  const answers = await Promise.all(answersQueue);
+    answers.push(answer);
+  }
+
   const markdowns = answers.map((answer) => answer.content as string);
 
   const abstract = await chain.invoke({
