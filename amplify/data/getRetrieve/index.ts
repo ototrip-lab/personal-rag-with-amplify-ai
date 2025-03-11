@@ -24,7 +24,8 @@ const client = generateClient<Schema>();
 
 // AWS SDK
 const llm = new BedrockChat({
-  model: 'anthropic.claude-3-5-sonnet-20240620-v1:0',
+  model: 'us.anthropic.claude-3-7-sonnet-20250219-v1:0',
+  region: 'us-east-1',
 });
 const embeddings = new BedrockEmbeddings({
   model: 'amazon.titan-embed-text-v2:0',
