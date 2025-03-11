@@ -83,7 +83,7 @@ export const StorageTab = () => {
       setCreatingState("info");
       const result = await client.queries.createKnowledge({
         identityID,
-        accessLevel: "protected",
+        accessLevel: "private",
         uploadedKey: key,
       });
 
