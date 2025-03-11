@@ -27,7 +27,7 @@ export class GenerateKnowledge extends Construct {
         new URL('generateKnowledge.ts', import.meta.url)
       ),
       runtime: Runtime.NODEJS_22_X,
-      timeout: Duration.minutes(1),
+      timeout: Duration.minutes(10),
       memorySize: 512 * 4,
     });
     storage.grantRead(func);
