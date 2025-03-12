@@ -1,5 +1,6 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+import { chatHandler } from "./chatHandler/resource";
 import { createKnowledge } from "./createKnowledge/resource";
 import { getRetrieve } from "./getRetrieve/resource";
 
@@ -60,6 +61,7 @@ const schema = a
     chat: a
       .conversation({
         aiModel: a.ai.model("Claude 3.5 Sonnet"),
+        handler: chatHandler,
         systemPrompt:
           "あなたは優秀な秘書です。\n\
           回答を作成するための知見はtoolsを利用て取得してください。\n\

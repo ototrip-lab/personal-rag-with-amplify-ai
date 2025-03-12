@@ -1,8 +1,10 @@
 import { defineBackend } from '@aws-amplify/backend';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+
 import { auth } from './auth/resource';
 import { EventNotifications } from './custom/eventNotifications/resource';
 import { GenerateKnowledge } from './custom/knowledge/resource';
+import { chatHandler } from './data/chatHandler/resource';
 import { createKnowledge } from './data/createKnowledge/resource';
 import { getRetrieve } from './data/getRetrieve/resource';
 import { data } from './data/resource';
@@ -14,6 +16,7 @@ const backend = defineBackend({
   storage,
   getRetrieve,
   createKnowledge,
+  chatHandler,
 });
 
 const customNotifications = new EventNotifications(
