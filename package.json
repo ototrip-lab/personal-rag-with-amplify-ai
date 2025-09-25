@@ -17,7 +17,7 @@
     "@aws-amplify/ui-react-storage": "3.9.0",
     "aws-amplify": "6.13.6",
     "aws-sdk": "2.1692.0",
-    "next": "15.2.3",
+    "next": "15.2.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-markdown": "10.1.0"
