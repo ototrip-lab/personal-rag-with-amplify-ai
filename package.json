@@ -28,7 +28,7 @@
     "@aws-sdk/client-dynamodb": "3.772.0",
     "@aws-sdk/lib-dynamodb": "3.772.0",
     "@biomejs/biome": "1.9.4",
-    "@langchain/aws": "0.1.7",
+    "@langchain/aws": "1.1.0",
     "@langchain/community": "0.3.36",
     "@langchain/core": "0.3.42",
     "@parcel/watcher": "2.5.1",
