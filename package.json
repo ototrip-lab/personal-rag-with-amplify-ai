@@ -40,7 +40,7 @@
     "constructs": "10.4.2",
     "esbuild": "0.25.1",
     "hnswlib-node": "3.0.0",
-    "langchain": "0.3.19",
+    "langchain": "1.2.3",
     "pdf-parse": "1.1.1",
     "tsx": "4.19.3",
     "typescript": "5.8.2"
